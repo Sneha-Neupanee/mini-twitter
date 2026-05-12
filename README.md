@@ -232,4 +232,4 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) runs on pushes to `main`:
   - Use managed Postgres/Redis/RabbitMQ or add backups, persistence strategy, and monitoring.
   - Consider enabling Spring Boot Actuator health endpoints and wiring compose healthchecks to HTTP.
  
-    enjoy using my mini twitter:)
+    have a blast using my mini twitter:)
