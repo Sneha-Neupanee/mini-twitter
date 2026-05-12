@@ -65,7 +65,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:-change-me-in-prod}
       JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
 
-      # Startup stability: don't fail fast while DB is warming up
+      # Startup stability
       SPRING_DATASOURCE_HIKARI_INITIALIZATION_FAIL_TIMEOUT: "0"
     ports:
       - "8080:8080"
