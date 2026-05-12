@@ -1,0 +1,16 @@
+.git
+.idea
+.vscode
+**/.classpath
+**/.project
+**/.settings
+**/*.iml
+
+**/target
+**/.m2
+**/node_modules
+**/dist
+**/build
+
+**/*.log
+.env

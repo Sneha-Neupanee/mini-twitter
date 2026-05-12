@@ -1,0 +1,28 @@
+name: ci
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-test-and-docker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Build & test (Maven)
+        run: mvn -f backend/pom.xml test
+
+      - name: Build Docker image
+        run: docker build -t mini-twitter-backend:ci -f backend/Dockerfile backend
