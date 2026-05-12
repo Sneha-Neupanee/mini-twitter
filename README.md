@@ -231,3 +231,5 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) runs on pushes to `main`:
   - Move secrets to a secret manager (or at minimum a protected CI/CD secret store).
   - Use managed Postgres/Redis/RabbitMQ or add backups, persistence strategy, and monitoring.
   - Consider enabling Spring Boot Actuator health endpoints and wiring compose healthchecks to HTTP.
+ 
+    enjoy using my mini twitter:)
