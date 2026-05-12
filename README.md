@@ -4,7 +4,7 @@ Mini Twitter is a production-style microblogging backend built with Spring Boot 
 
 This repository contains:
 - `backend/`: Spring Boot REST API (Java 17)
-- `frontend/`: React client (optional; not required to run the backend stack)
+- `frontend/`: React client (Vite + TailwindCSS) that consumes the backend API
 
 ## Key capabilities
 
@@ -43,6 +43,13 @@ mini-twitter/
 │       ├── messaging/    # Direct messages
 │       ├── events/       # RabbitMQ publisher/consumer
 │       └── config/       # Security, Redis, RabbitMQ, app wiring
+├── frontend/
+│   ├── package.json
+│   └── src/
+│       ├── api/          # API client (Axios)
+│       ├── context/      # Auth/session context
+│       ├── components/   # UI building blocks
+│       └── pages/        # Routes/pages
 ├── docker-compose.yml
 └── .github/workflows/ci.yml
 ```
@@ -58,6 +65,11 @@ mini-twitter/
 - PostgreSQL (primary relational datastore)
 - Redis (caching)
 - RabbitMQ (event bus; management UI enabled in Docker)
+
+### Frontend
+- React + Vite
+- TailwindCSS
+- Axios for HTTP calls to the backend API
 
 ## Running the full system (recommended)
 
@@ -78,6 +90,34 @@ Services started:
 - Redis: `localhost:6379`
 - RabbitMQ: `localhost:5672`
 - RabbitMQ Management UI: `http://localhost:15672`
+
+### Run the frontend against the Dockerized backend
+
+The frontend is not containerized in `docker-compose.yml` (intentionally, to keep the production backend stack focused), but it can be run locally while the backend runs in Docker.
+
+Prerequisites:
+- Node.js 18+
+
+Start the backend stack:
+
+```bash
+docker compose up --build
+```
+
+Start the frontend (in a separate terminal):
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+By default the backend is available at `http://localhost:8080/api`. If your frontend needs an explicit API base URL, set it using Vite environment variables (example):
+
+```bash
+echo "VITE_API_BASE_URL=http://localhost:8080/api" > .env.local
+npm run dev
+```
 
 ### Configuration via environment variables
 
@@ -127,6 +167,16 @@ mvn spring-boot:run
 ```
 
 Backend base URL: `http://localhost:8080/api`
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend dev server: `http://localhost:3000`
 
 ## Feed scoring
 
