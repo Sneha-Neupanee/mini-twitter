@@ -1,4 +1,4 @@
-# Mini Twitter (Backend + Infrastructure)
+# Mini Twitter
 
 Mini Twitter is a production-style microblogging backend built with Spring Boot 3 and a supporting infrastructure stack (PostgreSQL, Redis, RabbitMQ). The system includes JWT authentication, user/social graph, posts with engagement, feed generation, trending, and direct messaging.
 
