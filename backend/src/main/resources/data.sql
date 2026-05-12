@@ -1,4 +1,4 @@
--- Sample seed data for development
+-- Sample seed data for development purposes (0-0)
 -- Run this AFTER the app has started once (tables will be created by Hibernate)
 
 -- Note: passwords are BCrypt hashes of "password123"
