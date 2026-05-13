@@ -3,12 +3,15 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
+  - database/postgres-secret.yaml
   - database/postgres-service.yaml
   - database/postgres-statefulset.yaml
-  - redis/redis-service.yaml
-  - redis/redis-deployment.yaml
+  - rabbitmq/rabbitmq-secret.yaml
   - rabbitmq/rabbitmq-service.yaml
   - rabbitmq/rabbitmq-statefulset.yaml
+  - redis/redis-service.yaml
+  - redis/redis-deployment.yaml
+  - backend/backend-secret.yaml
   - backend/backend-configmap.yaml
   - backend/backend-service.yaml
   - backend/backend-deployment.yaml

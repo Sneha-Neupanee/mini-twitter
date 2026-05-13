@@ -1,12 +1,12 @@
-# Mini Twitter – Kubernetes manifests
+# Mini Twitter – Kubernetes config notes
 
-Apply order: namespace, secrets (edit first), data stores, app services, ingress.
+Apply order: namespace, secrets, data stores, app workloads, ingress. `kubectl apply -k ../` from the `k8s/` directory applies the full stack in a safe order.
 
-See repository root documentation or `../README.md` (if linked) for full run instructions.
+## Secrets
 
-## Secrets (required before apply)
+**Local default:** The repo includes `../database/postgres-secret.yaml`, `../rabbitmq/rabbitmq-secret.yaml`, and `../backend/backend-secret.yaml` with disposable dev values so `backend` pods do not hit `CreateContainerConfigError`. Rotate these for any shared or production environment.
 
-Edit and apply secrets, or generate from the command line:
+**Production:** Replace with your secret manager, Sealed Secrets, External Secrets Operator, or imperative apply, for example:
 
 ```bash
 kubectl create namespace mini-twitter --dry-run=client -o yaml | kubectl apply -f -
@@ -27,4 +27,14 @@ kubectl -n mini-twitter create secret generic backend-secret \
   --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-If you prefer checked-in templates, copy `database/postgres-secret.example.yaml` and `rabbitmq/rabbitmq-secret.example.yaml` and `backend/backend-secret.example.yaml` to non-example names, fill values, and `kubectl apply -f`.
+The `*.example.yaml` files under `database/`, `rabbitmq/`, and `backend/` are optional templates.
+
+**Backend wiring:** `backend-deployment.yaml` expects these exact names and keys:
+
+| Secret            | Keys                                      |
+|-------------------|-------------------------------------------|
+| `postgres-secret` | `username`, `password`, `database`        |
+| `rabbitmq-secret` | `username`, `password`                    |
+| `backend-secret`  | `jwt-secret` (injected as env `JWT_SECRET`) |
+
+Ensure `database` in `postgres-secret` matches `SPRING_DATASOURCE_URL` in `backend/backend-configmap.yaml` (default `minitwitter`).

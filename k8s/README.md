@@ -11,7 +11,9 @@ This directory contains production-style manifests for running Mini Twitter on a
 - **RabbitMQ**: StatefulSet + PVC; ClusterIP `rabbitmq` exposes AMQP (5672) and management (15672). Optional separate Ingress for the management UI (`rabbitmq-ingress-management.yaml`, host `rabbitmq.local`).
 - **HPA**: Backend HorizontalPodAutoscaler (CPU 70%) requires **metrics-server** in the cluster.
 
-Secrets are not committed with real values. Copy the `*.example.yaml` files in `database/`, `rabbitmq/`, and `backend/` to real manifest names (or use `kubectl create secret` as documented in `config/README.md`).
+Default **local development** secrets are committed as `database/postgres-secret.yaml`, `rabbitmq/rabbitmq-secret.yaml`, and `backend/backend-secret.yaml` (clearly labeled; rotate for anything beyond a disposable cluster). `kubectl apply -k k8s/` applies them in order before StatefulSets and the backend Deployment.
+
+For production, replace these objects using your platform’s secret workflow (Sealed Secrets, External Secrets, CI-generated apply, etc.). The `*.example.yaml` files remain as templates for copy-paste.
 
 ## Prerequisites
 
@@ -46,22 +48,7 @@ kind load docker-image mini-twitter-backend:latest
 kind load docker-image mini-twitter-frontend:latest
 ```
 
-## Create secrets
-
-Ensure `postgres-secret`, `rabbitmq-secret`, and `backend-secret` exist in namespace `mini-twitter`. See `k8s/config/README.md` for `kubectl create secret` examples.
-
-If you use the example files:
-
-```bash
-kubectl apply -f k8s/namespace.yaml
-cp k8s/database/postgres-secret.example.yaml k8s/database/postgres-secret.yaml
-cp k8s/rabbitmq/rabbitmq-secret.example.yaml k8s/rabbitmq/rabbitmq-secret.yaml
-cp k8s/backend/backend-secret.example.yaml k8s/backend/backend-secret.yaml
-# Edit the three *-secret.yaml files, then:
-kubectl apply -f k8s/database/postgres-secret.yaml
-kubectl apply -f k8s/rabbitmq/rabbitmq-secret.yaml
-kubectl apply -f k8s/backend/backend-secret.yaml
-```
+Default secrets ship with the repo for local clusters; see `k8s/README.md`. To override without editing tracked files, use `kubectl create secret` or Kustomize replacements.
 
 **Important**: `SPRING_DATASOURCE_URL` in `backend/backend-configmap.yaml` uses database name `minitwitter`. It must match the `database` key in `postgres-secret`.
 
@@ -110,10 +97,10 @@ Browse `http://rabbitmq.local` (credentials from `rabbitmq-secret`).
 | Path | Purpose |
 |------|---------|
 | `namespace.yaml` | Namespace `mini-twitter` |
-| `database/` | Postgres StatefulSet, Service, secret example |
+| `database/` | Postgres StatefulSet, Service, default `postgres-secret.yaml`, `postgres-secret.example.yaml` |
 | `redis/` | Redis Deployment + Service |
-| `rabbitmq/` | RabbitMQ StatefulSet, Service, secret example, optional management Ingress |
-| `backend/` | ConfigMap, Deployment, Service, HPA, JWT secret example |
+| `rabbitmq/` | RabbitMQ StatefulSet, Service, default `rabbitmq-secret.yaml`, example + optional management Ingress |
+| `backend/` | ConfigMap, Deployment, Service, HPA, default `backend-secret.yaml`, `backend-secret.example.yaml` |
 | `frontend/` | Deployment + Service |
 | `ingress/` | Main NGINX Ingress for `/` and `/api` |
 | `config/README.md` | Secret creation snippets |
