@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: mini-twitter
+  labels:
+    app.kubernetes.io/name: rabbitmq
+    app.kubernetes.io/part-of: mini-twitter
+spec:
+  type: ClusterIP
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: amqp
+    - name: management
+      port: 15672
+      targetPort: management
+  selector:
+    app.kubernetes.io/name: rabbitmq

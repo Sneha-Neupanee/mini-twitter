@@ -1,0 +1,4 @@
+# Generated locally from *.example.yaml — do not commit real values.
+postgres-secret.yaml
+rabbitmq-secret.yaml
+backend-secret.yaml

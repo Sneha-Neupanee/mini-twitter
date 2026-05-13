@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mini-twitter
+  labels:
+    app.kubernetes.io/name: mini-twitter
+    app.kubernetes.io/part-of: mini-twitter

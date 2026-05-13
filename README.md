@@ -225,6 +225,12 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) runs on pushes to `main`:
 - Maven build + tests
 - Docker image build for the backend (build-only; no deploy)
 
+## Kubernetes
+
+Production-style manifests live under `k8s/`. They target NGINX Ingress (`/` to frontend, `/api` to backend), StatefulSets for PostgreSQL and RabbitMQ with PVCs, Redis Deployment, backend HPA, and Actuator-based health probes.
+
+See `k8s/README.md` for architecture, secret setup, and apply steps.
+
 ## Production notes
 
 - The Docker Compose stack is designed for parity and repeatability. For real production:

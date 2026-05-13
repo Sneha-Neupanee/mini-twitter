@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: mini-twitter
+  labels:
+    app.kubernetes.io/name: mini-twitter-frontend
+    app.kubernetes.io/part-of: mini-twitter
+    app.kubernetes.io/component: ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mini-twitter-frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mini-twitter-frontend
+        app.kubernetes.io/part-of: mini-twitter
+        app.kubernetes.io/component: ui
+      annotations:
+        app.kubernetes.io/version: "1.0.0"
+    spec:
+      containers:
+        - name: frontend
+          image: mini-twitter-frontend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10

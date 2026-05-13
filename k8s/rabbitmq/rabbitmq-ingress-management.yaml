@@ -1,0 +1,25 @@
+# Optional: expose RabbitMQ management UI (requires ingress-nginx + metrics not required).
+# Add to /etc/hosts: <INGRESS_IP> rabbitmq.local
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rabbitmq-management
+  namespace: mini-twitter
+  labels:
+    app.kubernetes.io/name: rabbitmq-management
+    app.kubernetes.io/part-of: mini-twitter
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: rabbitmq.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rabbitmq
+                port:
+                  name: management
